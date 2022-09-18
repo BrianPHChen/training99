@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+
     public float speed = 5f;
 
     Player player = new Player(100, 0, "Player");
@@ -18,6 +20,11 @@ public class PlayerMovement : MonoBehaviour
     public float timeToChange = 5f;
     private float timeSinceChange = 0f;
 
+    // UI show collectables (Collect 3 types of bullets)
+    public TextMeshProUGUI UI_Collectable1 = null;
+    public TextMeshProUGUI UI_Collectable2 = null;
+    public TextMeshProUGUI UI_Collectable3 = null;
+    private int[] collectables = new int[3]; // Record values for collectables. 
 
     // Start is called before the first frame update
     void Start()
@@ -65,11 +72,34 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.LogError("OnTriggerEnter2D");
-        Debug.Log("Collision obj color: " + collision.transform.GetChild(0).GetComponent<Image>().color);
-        Debug.Log("Collision player color: " + gameObject.GetComponent<Image>().color);
-        if (collision.transform.GetChild(0).GetComponent<Image>().color != gameObject.GetComponent<Image>().color)
+        Color bulletColor = collision.transform.GetChild(0).GetComponent<Image>().color;
+        Color playerColor = gameObject.GetComponent<Image>().color;
+        Debug.Log("Collision obj color: " + bulletColor); 
+        Debug.Log("Collision player color: " + playerColor);
+
+        // Different color, player take damage
+        if ( playerColor != bulletColor)
         {
             m_Hp--;
+        }
+        // Same color: player can collect the bullet as resources
+        else
+        {
+            Sprite bulletType = collision.transform.GetChild(0).GetComponent<Image>().sprite;
+            Debug.Log("Collision bullet type: " + bulletType);
+            if (bulletType.name == "Knob") 
+            {
+                collectables[0] += 1;
+                // Debug.Log("bulletType.name == " + bulletType.name);
+            }
+            else if (bulletType.name == "Triangle")  
+            {
+                collectables[1] += 1;
+            }
+            else if (bulletType.name == "UISprite") 
+            {
+                collectables[2] += 1;
+            }
         }
         
         RefreshHpText();
@@ -78,5 +108,9 @@ public class PlayerMovement : MonoBehaviour
     private void RefreshHpText()
     {
         m_HpText.text = "HP: " + m_Hp;
+        UI_Collectable1.text = "Circle:   "  + collectables[0];	
+        UI_Collectable2.text = "Triangle: "  + collectables[1];	
+        UI_Collectable3.text = "Square:   "  + collectables[2];	
+
     }
 } // class

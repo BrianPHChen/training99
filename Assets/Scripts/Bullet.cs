@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
 {
 
     public GameObject player = null;
-
+    private float bulletSpeed = 0.5f;     // adjustable bullet speed
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime);
+        transform.Translate(Vector3.forward * Time.deltaTime * bulletSpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
