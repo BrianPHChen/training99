@@ -26,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI UI_Collectable3 = null;
     private int[] collectables = new int[3]; // Record values for collectables. 
 
+    // Prefab to show damage/collectable text
+    public GameObject floatingTextPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,21 +79,24 @@ public class PlayerMovement : MonoBehaviour
         Color playerColor = gameObject.GetComponent<Image>().color;
         Debug.Log("Collision obj color: " + bulletColor); 
         Debug.Log("Collision player color: " + playerColor);
-
+        
+        int damage = -1; 
         // Different color, player take damage
         if ( playerColor != bulletColor)
         {
-            m_Hp--;
+            m_Hp += damage;
+
+            // Show damage text
+            FloatingText printer = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity).GetComponent<FloatingText>();
+            printer.SetFloatingValue(damage);   // damage = negative value
         }
         // Same color: player can collect the bullet as resources
         else
         {
             Sprite bulletType = collision.transform.GetChild(0).GetComponent<Image>().sprite;
-            Debug.Log("Collision bullet type: " + bulletType);
             if (bulletType.name == "Knob") 
             {
                 collectables[0] += 1;
-                // Debug.Log("bulletType.name == " + bulletType.name);
             }
             else if (bulletType.name == "Triangle")  
             {
@@ -100,6 +106,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 collectables[2] += 1;
             }
+
+            // Show gain text
+            FloatingText printer = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity).GetComponent<FloatingText>();
+            printer.SetFloatingValue(+1);   // gain = positive value
         }
         
         RefreshHpText();
@@ -108,9 +118,9 @@ public class PlayerMovement : MonoBehaviour
     private void RefreshHpText()
     {
         m_HpText.text = "HP: " + m_Hp;
-        UI_Collectable1.text = "Circle:   "  + collectables[0];	
-        UI_Collectable2.text = "Triangle: "  + collectables[1];	
-        UI_Collectable3.text = "Square:   "  + collectables[2];	
+        UI_Collectable1.text = collectables[0].ToString();  // Circle	
+        UI_Collectable2.text = collectables[1].ToString();  // Triangle	
+        UI_Collectable3.text = collectables[2].ToString();  // Square	
 
     }
 } // class
