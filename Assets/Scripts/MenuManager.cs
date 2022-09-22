@@ -9,7 +9,10 @@ using UnityEditor;
 public class MenuManager : MonoBehaviour
 {
     public void onStartGame(string SceneName) {
+        Debug.Log("start button clicked");
+        CSVManager.AppendToFile(new string[1] {"start"});
         SceneManager.LoadScene(SceneName);
+        
     }
     
     public void QuitGame() {
