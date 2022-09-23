@@ -9,10 +9,14 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
 
     Player player = new Player(100, 0, "Player");
+    public HealthBar healthbar;
 
     public TextMeshProUGUI m_HpText = null;
     public TextMeshProUGUI m_TimeText = null;
-    public int m_Hp = 1;
+    public int m_Hp = 100;
+
+    public int maxHealth = 100;
+    public int currenthealth;
 
     public Color[] colors = new Color[3];
     public float timeToChange = 5f;
@@ -23,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         RefreshHpText();
+        currenthealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -70,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
         if (collision.transform.GetChild(0).GetComponent<Image>().color != gameObject.GetComponent<Image>().color)
         {
             m_Hp--;
+            currenthealth = m_Hp;
+            healthbar.SetHealth(currenthealth);
         }
         
         RefreshHpText();
