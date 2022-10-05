@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class VersusBullet : MonoBehaviour
 {
-    public VersusGameManager gameManager;
+    public GameObject[] players;
 
     public float bulletSpeed;
     public Color color;
@@ -13,7 +13,7 @@ public class VersusBullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        VersusPlayer player = gameManager.players[Random.Range(0, gameManager.players.Length)];
+        GameObject player = players[Random.Range(0, players.Length)];
         transform.LookAt(player.transform);
     }
 

@@ -12,13 +12,11 @@ public class VersusPlayer : MonoBehaviour
     public HealthBar healthBar;
     public string controlSet = null;  // Valid values: Player1, Player2
     public GameObject floatingTextPrefab; // Prefab to show damage/collectable text
-    public CircleCollider2D m_collider;
 
     // Start is called before the first frame update
     void Start()
     {
         healthBar.SetMaxHealth(m_Hp);
-        m_collider = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
@@ -38,12 +36,13 @@ public class VersusPlayer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        m_Hp -= 1;
+        int damage = -1;
+        m_Hp += damage;
         healthBar.SetHealth(m_Hp);
 
         // Show damage text
         FloatingText printer = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity).GetComponent<FloatingText>();
-        printer.SetFloatingValue(-1);
+        printer.SetFloatingValue(damage);   // damage = negative value
 
         // Game over condition
         if (m_Hp <= 0)
