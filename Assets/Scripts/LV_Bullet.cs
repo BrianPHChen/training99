@@ -47,13 +47,14 @@ public class LV_Bullet : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    // FixedUpdate is called once every0.02 seconds
+    void FixedUpdate()
     {
         if (_hitted)
         {
             Color newColor = new Color(_color.r, _color.g, _color.b, 0.5f);
             gameObject.GetComponent<SpriteRenderer>().color = newColor;
-            transform.Translate(Vector3.down * Time.deltaTime * bulletSpeed * 1);
+            transform.Translate(Vector3.down * Time.fixedDeltaTime * bulletSpeed * 1);
             // Destroy after 0.5 seconds of bullet gets hitted
             if (Time.time - _hittedTime >= 0.5f)
             {
@@ -67,7 +68,7 @@ public class LV_Bullet : MonoBehaviour
             transform.Translate(Vector3.up * Time.fixedDeltaTime * bulletSpeed * 0.3f);
         }
 
-        liveTime -= Time.deltaTime;
+        liveTime -= Time.fixedDeltaTime;
         if (liveTime <= 0)
         {
             gameObject.SetActive(false);
